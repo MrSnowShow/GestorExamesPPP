@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1494436905 source:c:\users\anon\documents\uc\ppp\project\main.c
+	<stdio.h>
+	<stdlib.h>
+	"structs.h"
+	"funcoes.h"
+
+1494437033 c:\users\anon\documents\uc\ppp\project\structs.h
+
+1494433906 source:c:\users\anon\documents\uc\ppp\project\funcoes.c
+	<stdio.h>
+	<stdlib.h>
+	"structs.h"
+	"funcoes.h"
+
+1494428996 c:\users\anon\documents\uc\ppp\project\funcoes.h
+
