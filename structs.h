@@ -28,38 +28,38 @@ typedef struct aluno {
     int matricula;
     char *curso;
     char *regime;
-    struct lista_exames *exames_inscritos;
+    struct node_exame *exames_inscritos;
 } Aluno;
 
 typedef struct exame {
-    Disciplina disciplina;
+    Disciplina *disciplina;
     Data data;
     Hora duracao;
     char *epoca;
     int sala;
-    struct lista_alunos *alunos_inscritos;
+    struct node_aluno *alunos_inscritos;
 } Exame;
 
 /*
- * Depois as listas ligadas
+ * Depois os nodes (nós em portugues) das listas ligadas
  * 1. Lista_alunos
  * 2. Lista_exames
  * 3. Lista_disciplinas
  */
 
-typedef struct lista_alunos {
+typedef struct node_aluno {
     Aluno *info;
-    struct lista_aluno *next;
-} Lista_alunos;
+    struct node_aluno *next;
+} Node_aluno;
 
-typedef struct lista_exames {
+typedef struct node_exame {
     Exame *info;
-    struct lista_exame *next;
-} Lista_exames;
+    struct node_exame *next;
+} Node_exame;
 
-typedef struct lista_disciplinas {
-    Disciplina info;
-    struct lista_disciplinas *next;
-} Lista_disciplinas;
+typedef struct node_disciplina {
+    Disciplina *info;
+    struct node_disciplina *next;
+} Node_disciplina;
 
 #endif /* STRUCTS_H_INCLUDED */
