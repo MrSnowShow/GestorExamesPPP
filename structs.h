@@ -1,5 +1,6 @@
 #ifndef STRUCTS_H_INCLUDED
 #define STRUCTS_H_INCLUDED
+#define MAX 256
 
 /*
  * Primeiro declaram-se as estruturas
@@ -36,16 +37,21 @@ typedef struct exame {
     Data data;
     Hora duracao;
     char *epoca;
-    int sala;
+    char *sala;
     struct node_aluno *alunos_inscritos;
 } Exame;
 
 /*
  * Depois os nodes (nós em portugues) das listas ligadas
- * 1. Lista_alunos
- * 2. Lista_exames
- * 3. Lista_disciplinas
+ * 1. Node_disciplina
+ * 2. Node_aluno
+ * 3. Node_exame
  */
+
+typedef struct node_disciplina {
+    Disciplina *info;
+    struct node_disciplina *next;
+} Node_disciplina;
 
 typedef struct node_aluno {
     Aluno *info;
@@ -56,10 +62,5 @@ typedef struct node_exame {
     Exame *info;
     struct node_exame *next;
 } Node_exame;
-
-typedef struct node_disciplina {
-    Disciplina *info;
-    struct node_disciplina *next;
-} Node_disciplina;
 
 #endif /* STRUCTS_H_INCLUDED */

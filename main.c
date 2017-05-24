@@ -5,16 +5,16 @@
 
 int main()
 {
-    Node_aluno *listaA;
-    Aluno *a1, *a2, *a3;
-    listaA = init_listaA();
-    a1 = cria_aluno();
-    a2 = cria_aluno();
-    a3 = cria_aluno();
+    Node_disciplina *lista_Disciplinas;
 
-    inserir_listaA(listaA, a1);
-    inserir_listaA(listaA, a2);
-    inserir_listaA(listaA, a3);
-    print_listaA(listaA);
+    lista_Disciplinas = ler_disciplinas();
+    printf("ANTES\n");
+    print_listaDisciplinas(lista_Disciplinas);
+
+    printf("DEPOIS\n");
+    remover_listaDisciplinas(lista_Disciplinas, "Fisica");
+    remover_listaDisciplinas(lista_Disciplinas, "Beber pinga");
+    print_listaDisciplinas(lista_Disciplinas);
+
     return 0;
 }

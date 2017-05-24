@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "structs.h"
 #include "funcoes.h"
 
-#define MAX 256
+
+/* Funcoes auxiliares */
+
+void remove_barraN(char *minha_string)
+{
+    minha_string[strlen(minha_string)-1] = '\0';
+}
 
 /* Funcoes de print */
 
@@ -29,7 +37,7 @@ void print_aluno(Aluno *a)
     printf("Matricula:\t%d\n", a->matricula);
     printf("Curso:\t\t%s\n", a->curso);
     printf("Regime:\t\t%s\n", a->regime);
-    print_listaE(a->exames_inscritos);
+    print_listaExames(a->exames_inscritos);
 }
 
 void print_exame(Exame *e)
@@ -39,12 +47,13 @@ void print_exame(Exame *e)
     print_hora(e->duracao);
     printf("Epoca:\t\t%s\n", e->epoca);
     printf("Sala:\t\t%d\n", e->sala);
-    print_listaA(e->alunos_inscritos);
+    print_listaAlunos(e->alunos_inscritos);
 }
 
-void print_listaD(Node_disciplina *listaD)
+void print_listaDisciplinas(Node_disciplina *listaD)
 {
     printf("\nLista de disciplinas\n");
+    listaD = listaD->next;
     while (listaD != NULL) {
         print_disciplina(listaD->info);
         printf("\n");
@@ -52,12 +61,13 @@ void print_listaD(Node_disciplina *listaD)
     }
 }
 
-void print_listaA(Node_aluno *listaA)
+void print_listaAlunos(Node_aluno *listaA)
 {
-    if (listaA->info == NULL) {
+    if (listaA->next == NULL) {
         printf("Nao ha alunos!\n");
         return;
     }
+    listaA = listaA->next;
     printf("\nLista de alunos\n");
     while (listaA != NULL) {
         print_aluno(listaA->info);
@@ -66,12 +76,13 @@ void print_listaA(Node_aluno *listaA)
     }
 }
 
-void print_listaE(Node_exame *listaE)
+void print_listaExames(Node_exame *listaE)
 {
-    if (listaE->info == NULL) {
+    if (listaE->next == NULL) {
         printf("Nao ha exames!\n");
         return;
     }
+    listaE = listaE->next;
     printf("\nLista de exames\n");
     while (listaE != NULL) {
         print_exame(listaE->info);
@@ -107,9 +118,7 @@ Hora cria_hora()
 Disciplina* cria_disciplina()
 {
     Disciplina *d;
-    d = malloc(sizeof(Node_disciplina));
-    d->nome = malloc(MAX*sizeof(char));
-    d->docente = malloc(MAX*sizeof(char));
+    d = init_disciplina();
 
     printf("Nome: ");
     gets(d->nome);
@@ -123,10 +132,7 @@ Disciplina* cria_disciplina()
 Aluno* cria_aluno()
 {
     Aluno *a;
-    a = malloc(sizeof(Aluno));
-    a->curso = malloc(MAX*sizeof(char));
-    a->regime = malloc(MAX*sizeof(char));
-    a->exames_inscritos = init_listaE();
+    a = init_aluno();
 
     printf("ID: ");
     scanf("%d", &a->id);
@@ -145,9 +151,7 @@ Aluno* cria_aluno()
 Exame* cria_exame()
 {
     Exame *e;
-    e = malloc(sizeof(Exame));
-    e->epoca = malloc(MAX*sizeof(char));
-    e->alunos_inscritos = init_listaA();
+    e = init_exame();
 
     printf("Disciplina\n");
     e->disciplina = cria_disciplina();
@@ -160,13 +164,41 @@ Exame* cria_exame()
     gets(e->epoca);
     fflush(stdin);
     printf("Sala: ");
-    scanf("%d", &e->sala);
+    gets(e->sala);
+    fflush(stdin);
     return e;
 }
 
-/* Funcoes para inicializar as listas ligadas (criar o primeiro node e deixar a NULL) */
+/* Funcoes para inicializar (fazer mallocs) as estruturas */
 
-Node_disciplina* init_listaD()
+Disciplina* init_disciplina()
+{
+    Disciplina *d;
+    d = malloc(sizeof(Node_disciplina));
+    d->nome = malloc(MAX*sizeof(char));
+    d->docente = malloc(MAX*sizeof(char));
+    return d;
+}
+Aluno* init_aluno()
+{
+    Aluno *a;
+    a = malloc(sizeof(Aluno));
+    a->exames_inscritos = init_nodeExame();
+
+    return a;
+}
+Exame* init_exame()
+{
+    Exame *e;
+    e = malloc(sizeof(Exame));
+    e->alunos_inscritos = init_nodeAluno();
+
+    return e;
+}
+
+/* Funcoes para inicializar as listas ligadas (criar o primeiro node e deixar os campos a NULL) */
+
+Node_disciplina* init_nodeDisciplina()
 {
     Node_disciplina *primeiro_node;
     primeiro_node = malloc(sizeof(Node_disciplina));
@@ -175,7 +207,7 @@ Node_disciplina* init_listaD()
     return primeiro_node;
 }
 
-Node_aluno* init_listaA()
+Node_aluno* init_nodeAluno()
 {
     Node_aluno *primeiro_node;
     primeiro_node = malloc(sizeof(Node_aluno));
@@ -184,7 +216,7 @@ Node_aluno* init_listaA()
     return primeiro_node;
 }
 
-Node_exame* init_listaE()
+Node_exame* init_nodeExame()
 {
     Node_exame *primeiro_node;
     primeiro_node = malloc(sizeof(Node_exame));
@@ -195,37 +227,96 @@ Node_exame* init_listaE()
 
 /* Funcoes para inserir um node na lista ligada */
 
-void inserir_listaD(Node_disciplina *listaD, Disciplina *novaD)
+void inserir_listaDisciplinas(Node_disciplina *listaD, Disciplina *novaDisciplina)
 {
     Node_disciplina *novo_node;
 
-    if (listaD->info == NULL) {
-        listaD->info = novaD;
-    } else {
-        while (listaD->next != NULL)
-            listaD = listaD->next;
+    while (listaD->next != NULL)
+        listaD = listaD->next;
 
-        /* quando chega ate ao fim */
-        novo_node = malloc(sizeof(Node_disciplina));
-        novo_node->info = novaD;
-        novo_node->next = NULL;
-        listaD->next = novo_node;
-    }
+    /* quando chega ate ao fim */
+    novo_node = init_nodeDisciplina();
+    novo_node->info = novaDisciplina;
+    listaD->next = novo_node;
 }
 
-void inserir_listaA(Node_aluno *listaA, Aluno *novoA)
+void inserir_listaAlunos(Node_aluno *listaA, Aluno *novoAluno)
 {
     Node_aluno *novo_node;
 
-    if (listaA->info == NULL) {
-        listaA->info = novoA;
-    } else {
-        while (listaA->next != NULL)
-            listaA = listaA->next;
-        /* a mesma coisa */
-        novo_node = malloc(sizeof(Node_aluno));
-        novo_node->info = novoA;
-        novo_node->next = NULL;
-        listaA->next = novo_node;
-    }
+    while (listaA->next != NULL)
+        listaA = listaA->next;
+
+    novo_node = init_nodeAluno();
+    novo_node->info = novoAluno;
+    listaA->next = novo_node;
 }
+
+void inserir_listaExames(Node_exame *listaE, Exame *novoExame)
+{
+    Node_exame *novo_node;
+
+    while (listaE->next != NULL)
+        listaE = listaE->next;
+
+    novo_node = init_nodeExame();
+    novo_node->info = novoExame;
+    listaE->next = novo_node;
+}
+
+/* Funcoes para remover da lista ligada */
+
+void remover_listaDisciplinas(Node_disciplina *listaD, char *nome)
+{
+    Node_disciplina *anterior;
+    anterior = listaD;
+    listaD = listaD->next;
+
+    while (strcmp(nome, listaD->info->nome) != 0) {
+        anterior = anterior->next;
+        listaD = listaD->next;
+    }
+
+    anterior->next = listaD->next;
+    free(listaD);
+
+}
+
+/* funcoes para ler ficheiros */
+
+Node_disciplina* ler_disciplinas()
+{
+    FILE *txt;
+    Disciplina *d;
+    Node_disciplina *listaD;
+    char linha[MAX];
+
+    listaD = init_nodeDisciplina();
+
+    txt = fopen("disciplinas.txt", "r");
+
+    fgets(linha, MAX, txt);
+    remove_barraN(linha);
+    while (strcmp(linha, "")) {
+        if (strcmp(linha, "-") == 0) {
+            d = init_disciplina();
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+
+            strcpy(d->nome, linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+
+            strcpy(d->docente, linha);
+
+            inserir_listaDisciplinas(listaD, d);
+        }
+        fgets(linha, MAX, txt);
+        remove_barraN(linha);
+    }
+    fclose(txt);
+    return listaD;
+}
+
