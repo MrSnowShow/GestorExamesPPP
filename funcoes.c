@@ -5,24 +5,38 @@
 #include "structs.h"
 #include "funcoes.h"
 
+#define MAX 256
 
 /* Funcoes auxiliares */
-
 void remove_barraN(char *minha_string)
 {
     minha_string[strlen(minha_string)-1] = '\0';
 }
 
+Hora fim_exame(Exame *e)
+{
+    int overflow_hora; /* Se acontecer algo como 50 + 20 minutos entao overflow_hora = 1 */
+    Hora fim;
+
+    fim.minutos = (e->data.hora.minutos + e->duracao.minutos) % 60;
+    fim.horas = e->data.hora.horas + e->duracao.horas;
+
+    overflow_hora = (e->data.hora.minutos + e->duracao.minutos) / 60;
+    fim.horas += overflow_hora;
+
+    return fim;
+}
+
 /* Funcoes de print */
+void print_hora(Hora h)
+{
+    printf("Hora:\t\t%dh%d\n", h.horas, h.minutos);
+}
 
 void print_data(Data d)
 {
     printf("Data:\t\t%d/%d/%d\n", d.dia, d.mes, d.ano);
-}
-
-void print_hora(Hora h)
-{
-    printf("Hora:\t\t%dh%d\n", h.horas, h.minutos);
+    print_hora(d.hora);
 }
 
 void print_disciplina(Disciplina *d)
@@ -44,9 +58,10 @@ void print_exame(Exame *e)
 {
     print_disciplina(e->disciplina);
     print_data(e->data);
+    printf("Duracao:\n");
     print_hora(e->duracao);
     printf("Epoca:\t\t%s\n", e->epoca);
-    printf("Sala:\t\t%d\n", e->sala);
+    printf("Sala:\t\t%s\n", e->sala);
     print_listaAlunos(e->alunos_inscritos);
 }
 
@@ -92,6 +107,15 @@ void print_listaExames(Node_exame *listaE)
 }
 
 /* Funcoes de criar */
+Hora cria_hora()
+{
+    Hora h;
+    printf("Horas: ");
+    scanf("%d", &h.horas);
+    printf("Minutos: ");
+    scanf("%d", &h.minutos);
+    return h;
+}
 
 Data cria_data()
 {
@@ -102,17 +126,8 @@ Data cria_data()
     scanf("%d", &d.mes);
     printf("Ano: ");
     scanf("%d", &d.ano);
+    d.hora = cria_hora();
     return d;
-}
-
-Hora cria_hora()
-{
-    Hora h;
-    printf("Horas: ");
-    scanf("%d", &h.horas);
-    printf("Minutos: ");
-    scanf("%d", &h.minutos);
-    return h;
 }
 
 Disciplina* cria_disciplina()
@@ -170,7 +185,6 @@ Exame* cria_exame()
 }
 
 /* Funcoes para inicializar (fazer mallocs) as estruturas */
-
 Disciplina* init_disciplina()
 {
     Disciplina *d;
@@ -183,6 +197,8 @@ Aluno* init_aluno()
 {
     Aluno *a;
     a = malloc(sizeof(Aluno));
+    a->curso = malloc(MAX*sizeof(char));
+    a->regime = malloc(MAX*sizeof(char));
     a->exames_inscritos = init_nodeExame();
 
     return a;
@@ -191,13 +207,17 @@ Exame* init_exame()
 {
     Exame *e;
     e = malloc(sizeof(Exame));
+    e->disciplina = malloc(sizeof(Disciplina));
+    e->disciplina->nome = malloc(MAX*sizeof(char));
+    e->disciplina->docente = malloc(MAX*sizeof(char));
+    e->epoca = malloc(MAX*sizeof(char));
+    e->sala = malloc(MAX*sizeof(char));
     e->alunos_inscritos = init_nodeAluno();
 
     return e;
 }
 
 /* Funcoes para inicializar as listas ligadas (criar o primeiro node e deixar os campos a NULL) */
-
 Node_disciplina* init_nodeDisciplina()
 {
     Node_disciplina *primeiro_node;
@@ -226,7 +246,6 @@ Node_exame* init_nodeExame()
 }
 
 /* Funcoes para inserir um node na lista ligada */
-
 void inserir_listaDisciplinas(Node_disciplina *listaD, Disciplina *novaDisciplina)
 {
     Node_disciplina *novo_node;
@@ -265,7 +284,6 @@ void inserir_listaExames(Node_exame *listaE, Exame *novoExame)
 }
 
 /* Funcoes para remover da lista ligada */
-
 void remover_listaDisciplinas(Node_disciplina *listaD, char *nome)
 {
     Node_disciplina *anterior;
@@ -283,8 +301,7 @@ void remover_listaDisciplinas(Node_disciplina *listaD, char *nome)
 }
 
 /* funcoes para ler ficheiros */
-
-Node_disciplina* ler_disciplinas()
+Node_disciplina* ler_disciplinas(char *ficheiro)
 {
     FILE *txt;
     Disciplina *d;
@@ -293,7 +310,7 @@ Node_disciplina* ler_disciplinas()
 
     listaD = init_nodeDisciplina();
 
-    txt = fopen("disciplinas.txt", "r");
+    txt = fopen(ficheiro, "r");
 
     fgets(linha, MAX, txt);
     remove_barraN(linha);
@@ -320,3 +337,71 @@ Node_disciplina* ler_disciplinas()
     return listaD;
 }
 
+Node_exame* ler_exames(char *ficheiro)
+{
+    FILE *txt;
+    Exame *e;
+    Node_exame *listaE;
+    char linha[MAX];
+
+    listaE = init_nodeExame();
+
+    txt = fopen(ficheiro, "r");
+    fgets(linha, MAX, txt);
+    remove_barraN(linha);
+    while (strcmp(linha, "")) {
+        if (strcmp(linha, "-") == 0) {
+            e = init_exame();
+            /* Disciplinas */
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            strcpy(e->disciplina->nome, linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            strcpy(e->disciplina->docente, linha);
+            /* Data */
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            e->data.dia = atoi(linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            e->data.mes = atoi(linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            e->data.ano = atoi(linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            e->data.hora.horas = atoi(linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            e->data.hora.minutos = atoi(linha);
+            /* Duracao */
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            e->duracao.horas = atoi(linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            e->duracao.minutos = atoi(linha);
+            /* Epoca */
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            strcpy(e->epoca, linha);
+            /* Sala */
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            strcpy(e->sala, linha);
+
+            inserir_listaExames(listaE, e);
+        }
+        fgets(linha, MAX, txt);
+        remove_barraN(linha);
+    }
+    fclose(txt);
+    return listaE;
+}

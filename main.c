@@ -5,16 +5,14 @@
 
 int main()
 {
-    Node_disciplina *lista_Disciplinas;
+    Node_disciplina *lista_disciplinas;
+    Node_exame *lista_exams;
 
-    lista_Disciplinas = ler_disciplinas();
-    printf("ANTES\n");
-    print_listaDisciplinas(lista_Disciplinas);
+    lista_disciplinas = ler_disciplinas("disciplinas.txt");
+    lista_exams = ler_exames("exames.txt");
 
-    printf("DEPOIS\n");
-    remover_listaDisciplinas(lista_Disciplinas, "Fisica");
-    remover_listaDisciplinas(lista_Disciplinas, "Beber pinga");
-    print_listaDisciplinas(lista_Disciplinas);
+    print_listaDisciplinas(lista_disciplinas);
+    print_listaExames(lista_exams);
 
     return 0;
 }

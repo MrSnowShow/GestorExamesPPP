@@ -3,10 +3,11 @@
 
 /* Funcoes auxiliares */
 void remove_barraN(char *minha_string);
+Hora fim_exame(Exame *e);
 
 /* Funcoes de print das estruturas */
-void print_data(Data d);
 void print_hora(Hora h);
+void print_data(Data d);
 void print_disciplina(Disciplina *d);
 void print_aluno(Aluno *a);
 void print_exame(Exame *e);
@@ -17,8 +18,8 @@ void print_listaAlunos(Node_aluno *listaA);
 void print_listaExames(Node_exame *listaE);
 
 /* Funcoes para criar as estruturas apartir do utilizador */
-Data cria_data();
 Hora cria_hora();
+Data cria_data();
 Disciplina* cria_disciplina();
 Aluno* cria_aluno();
 Exame* cria_exame();
@@ -42,6 +43,8 @@ void inserir_listaExames(Node_exame *listaE, Exame *novoE);
 void remover_listaDisciplinas(Node_disciplina *listaD, char *nome);
 
 /* Funcoes para ler dos ficheiros */
-Node_disciplina* ler_disciplinas();
+Node_disciplina* ler_disciplinas(char *ficheiro);
+
+Node_exame* ler_exames(char *ficheiro);
 
 #endif /* FUNCOES_H_INCLUDED */

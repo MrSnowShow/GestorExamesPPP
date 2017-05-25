@@ -1,23 +1,23 @@
 #ifndef STRUCTS_H_INCLUDED
 #define STRUCTS_H_INCLUDED
-#define MAX 256
 
 /*
  * Primeiro declaram-se as estruturas
- * 1. Data
- * 2. Hora
+ * 1. Hora
+ * 2. Data
  * 3. Disciplina
  * 4. Aluno (com lista ligada de exames inscritos definida em baixo)
  * 5. Exame (com lista ligada de alunos inscritos definida em baixo)
  */
 
-typedef struct data {
-    int dia, mes, ano;
-} Data;
-
 typedef struct hora {
     int horas, minutos;
 } Hora;
+
+typedef struct data {
+    int dia, mes, ano;
+    Hora hora;
+} Data;
 
 typedef struct disciplina {
     char *nome;

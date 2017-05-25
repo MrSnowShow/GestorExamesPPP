@@ -1,18 +1,18 @@
 # depslib dependency file v1.0
-1495645265 source:c:\users\anon\documents\uc\ppp\project\main.c
+1495671836 source:c:\users\anon\documents\uc\ppp\project\main.c
 	<stdio.h>
 	<stdlib.h>
 	"structs.h"
 	"funcoes.h"
 
-1495645479 c:\users\anon\documents\uc\ppp\project\structs.h
+1495660397 c:\users\anon\documents\uc\ppp\project\structs.h
 
-1495645654 source:c:\users\anon\documents\uc\ppp\project\funcoes.c
+1495671797 source:c:\users\anon\documents\uc\ppp\project\funcoes.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"structs.h"
 	"funcoes.h"
 
-1495643808 c:\users\anon\documents\uc\ppp\project\funcoes.h
+1495669370 c:\users\anon\documents\uc\ppp\project\funcoes.h
 
