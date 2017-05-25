@@ -22,7 +22,7 @@ Hora cria_hora();
 Data cria_data();
 Disciplina* cria_disciplina();
 Aluno* cria_aluno();
-Exame* cria_exame();
+Exame* cria_exame(Node_disciplina *disciplinas_existentes, Node_exame *exames_existentes);
 
 /* Funcoes para inicializar (fazer mallocs) as estruturas de pointeiros */
 Disciplina* init_disciplina();
@@ -44,7 +44,7 @@ void remover_listaDisciplinas(Node_disciplina *listaD, char *nome);
 
 /* Funcoes para ler dos ficheiros */
 Node_disciplina* ler_disciplinas(char *ficheiro);
-
+Node_aluno* ler_alunos(char *ficheiro);
 Node_exame* ler_exames(char *ficheiro);
 
 #endif /* FUNCOES_H_INCLUDED */

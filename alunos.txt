@@ -1,0 +1,27 @@
+-
+128
+1
+LEI
+Estudante
+-
+256
+2
+LDM
+Trabalhador-estudante
+-
+512
+3
+LEM
+Erasmus
+-
+1024
+2
+LEI
+Atleta
+-
+2048
+1
+LDM
+Dirigente Associativo
+
+

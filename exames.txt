@@ -35,7 +35,7 @@ Xico
 Especial
 C5.6
 -
-Fisica
+Astronomia I
 Meleiro
 4
 6
@@ -47,7 +47,7 @@ Meleiro
 Normal
 C5.1
 -
-Beber pinga
+Astronomia II
 Roman
 1
 6
@@ -57,5 +57,5 @@ Roman
 3
 30
 Especial
-Bar
+Rua
 

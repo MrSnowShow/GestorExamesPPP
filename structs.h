@@ -38,6 +38,7 @@ typedef struct exame {
     Hora duracao;
     char *epoca;
     char *sala;
+    int inscritos;
     struct node_aluno *alunos_inscritos;
 } Exame;
 

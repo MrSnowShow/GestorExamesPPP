@@ -163,7 +163,7 @@ Aluno* cria_aluno()
     return a;
 }
 
-Exame* cria_exame()
+Exame* cria_exame(Node_disciplina *disciplinas_existentes, Node_exame *exames_existentes)
 {
     Exame *e;
     e = init_exame();
@@ -212,6 +212,7 @@ Exame* init_exame()
     e->disciplina->docente = malloc(MAX*sizeof(char));
     e->epoca = malloc(MAX*sizeof(char));
     e->sala = malloc(MAX*sizeof(char));
+    e->inscritos = 0;
     e->alunos_inscritos = init_nodeAluno();
 
     return e;
@@ -335,6 +336,48 @@ Node_disciplina* ler_disciplinas(char *ficheiro)
     }
     fclose(txt);
     return listaD;
+}
+
+Node_aluno* ler_alunos(char *ficheiro)
+{
+    FILE *txt;
+    Aluno *a;
+    Node_aluno *listaA;
+    char linha[MAX];
+
+    listaA = init_nodeAluno();
+
+    txt = fopen(ficheiro, "r");
+
+    fgets(linha, MAX, txt);
+    remove_barraN(linha);
+    while (strcmp(linha, "")) {
+        if (strcmp(linha, "-") == 0) {
+            a = init_aluno();
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            a->id = atoi(linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            a->matricula = atoi(linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            strcpy(a->curso, linha);
+
+            fgets(linha, MAX, txt);
+            remove_barraN(linha);
+            strcpy(a->regime, linha);
+
+            inserir_listaAlunos(listaA, a);
+        }
+        fgets(linha, MAX, txt);
+        remove_barraN(linha);
+    }
+    fclose(txt);
+    return listaA;
 }
 
 Node_exame* ler_exames(char *ficheiro)
