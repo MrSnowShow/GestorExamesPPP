@@ -27,6 +27,160 @@ Hora fim_exame(Exame *e)
     return fim;
 }
 
+/* Funcoes para inicializar (fazer mallocs) as estruturas */
+Disciplina* init_disciplina()
+{
+    Disciplina *d;
+    d = malloc(sizeof(Node_disciplina));
+    d->nome = malloc(MAX*sizeof(char));
+    d->docente = malloc(MAX*sizeof(char));
+    return d;
+}
+Aluno* init_aluno()
+{
+    Aluno *a;
+    a = malloc(sizeof(Aluno));
+    a->curso = malloc(MAX*sizeof(char));
+    a->regime = malloc(MAX*sizeof(char));
+    a->exames_inscritos = init_nodeExame();
+
+    return a;
+}
+Exame* init_exame()
+{
+    Exame *e;
+    e = malloc(sizeof(Exame));
+    e->disciplina = malloc(sizeof(Disciplina));
+    e->disciplina->nome = malloc(MAX*sizeof(char));
+    e->disciplina->docente = malloc(MAX*sizeof(char));
+    e->epoca = malloc(MAX*sizeof(char));
+    e->sala = malloc(MAX*sizeof(char));
+    e->inscritos = 0;
+    e->alunos_inscritos = init_nodeAluno();
+
+    return e;
+}
+
+/* Funcoes para inicializar as listas ligadas (criar o primeiro node e deixar os campos a NULL) */
+Node_disciplina* init_nodeDisciplina()
+{
+    Node_disciplina *primeiro_node;
+    primeiro_node = malloc(sizeof(Node_disciplina));
+    primeiro_node->info = NULL;
+    primeiro_node->next = NULL;
+    return primeiro_node;
+}
+
+Node_aluno* init_nodeAluno()
+{
+    Node_aluno *primeiro_node;
+    primeiro_node = malloc(sizeof(Node_aluno));
+    primeiro_node->info = NULL;
+    primeiro_node->next = NULL;
+    return primeiro_node;
+}
+
+Node_exame* init_nodeExame()
+{
+    Node_exame *primeiro_node;
+    primeiro_node = malloc(sizeof(Node_exame));
+    primeiro_node->info = NULL;
+    primeiro_node->next = NULL;
+    return primeiro_node;
+}
+
+/* Funcoes de criar */
+Hora cria_hora()
+{
+    Hora h;
+    printf("Horas: ");
+    scanf("%d", &h.horas);
+    printf("Minutos: ");
+    scanf("%d", &h.minutos);
+    return h;
+}
+
+Data cria_data()
+{
+    Data d;
+    printf("Dia: ");
+    scanf("%d", &d.dia);
+    printf("Mes: ");
+    scanf("%d", &d.mes);
+    printf("Ano: ");
+    scanf("%d", &d.ano);
+    d.hora = cria_hora();
+    return d;
+}
+
+Disciplina* cria_disciplina()
+{
+    Disciplina *d;
+    d = init_disciplina();
+
+    printf("Nome: ");
+    gets(d->nome);
+    fflush(stdin);
+    printf("Docente: ");
+    gets(d->docente);
+    fflush(stdin);
+    return d;
+}
+
+Aluno* cria_aluno()
+{
+    Aluno *a;
+    a = init_aluno();
+
+    printf("ID: ");
+    scanf("%d", &a->id);
+    printf("Matricula: ");
+    scanf("%d", &a->matricula);
+    fflush(stdin);
+    printf("Curso: ");
+    gets(a->curso);
+    fflush(stdin);
+    printf("Regime: ");
+    gets(a->regime);
+    fflush(stdin);
+    return a;
+}
+
+Exame* cria_exame(Node_disciplina *disciplinas_existentes, Node_exame *exames_existentes)
+{
+    Exame *e;
+
+    char nome[MAX];
+    Node_disciplina *existe;
+
+    e = init_exame();
+
+    printf("Disciplina\n");
+    printf("Nome da disciplina: ");
+    gets(nome);
+    existe = procurar_listaDisciplinas(disciplinas_existentes, nome);
+
+    if (existe == NULL) {
+        printf("A disciplina nao existe na base de dados\n");
+        return NULL;
+    }
+
+    e->disciplina = existe->info;
+
+    printf("Data\n");
+    e->data = cria_data();
+    printf("Duracao\n");
+    e->duracao = cria_hora();
+    fflush(stdin);
+    printf("Epoca: ");
+    gets(e->epoca);
+    fflush(stdin);
+    printf("Sala: ");
+    gets(e->sala);
+    fflush(stdin);
+    return e;
+}
+
 /* Funcoes de print */
 void print_hora(Hora h)
 {
@@ -105,145 +259,18 @@ void print_listaExames(Node_exame *listaE)
         listaE = listaE->next;
     }
 }
-
-/* Funcoes de criar */
-Hora cria_hora()
+/* Funcoes para procurar nas listas ligadas */
+Node_disciplina* procurar_listaDisciplinas(Node_disciplina *listaD, char *nome)
 {
-    Hora h;
-    printf("Horas: ");
-    scanf("%d", &h.horas);
-    printf("Minutos: ");
-    scanf("%d", &h.minutos);
-    return h;
-}
+    listaD = listaD->next;
+    while (listaD != NULL) {
+        if (strcmp(nome, listaD->info->nome) == 0)
+            break;
+        else
+            listaD = listaD->next;
+    }
 
-Data cria_data()
-{
-    Data d;
-    printf("Dia: ");
-    scanf("%d", &d.dia);
-    printf("Mes: ");
-    scanf("%d", &d.mes);
-    printf("Ano: ");
-    scanf("%d", &d.ano);
-    d.hora = cria_hora();
-    return d;
-}
-
-Disciplina* cria_disciplina()
-{
-    Disciplina *d;
-    d = init_disciplina();
-
-    printf("Nome: ");
-    gets(d->nome);
-    fflush(stdin);
-    printf("Docente: ");
-    gets(d->docente);
-    fflush(stdin);
-    return d;
-}
-
-Aluno* cria_aluno()
-{
-    Aluno *a;
-    a = init_aluno();
-
-    printf("ID: ");
-    scanf("%d", &a->id);
-    printf("Matricula: ");
-    scanf("%d", &a->matricula);
-    fflush(stdin);
-    printf("Curso: ");
-    gets(a->curso);
-    fflush(stdin);
-    printf("Regime: ");
-    gets(a->regime);
-    fflush(stdin);
-    return a;
-}
-
-Exame* cria_exame(Node_disciplina *disciplinas_existentes, Node_exame *exames_existentes)
-{
-    Exame *e;
-    e = init_exame();
-
-    printf("Disciplina\n");
-    e->disciplina = cria_disciplina();
-    printf("Data\n");
-    e->data = cria_data();
-    printf("Duracao\n");
-    e->duracao = cria_hora();
-    fflush(stdin);
-    printf("Epoca: ");
-    gets(e->epoca);
-    fflush(stdin);
-    printf("Sala: ");
-    gets(e->sala);
-    fflush(stdin);
-    return e;
-}
-
-/* Funcoes para inicializar (fazer mallocs) as estruturas */
-Disciplina* init_disciplina()
-{
-    Disciplina *d;
-    d = malloc(sizeof(Node_disciplina));
-    d->nome = malloc(MAX*sizeof(char));
-    d->docente = malloc(MAX*sizeof(char));
-    return d;
-}
-Aluno* init_aluno()
-{
-    Aluno *a;
-    a = malloc(sizeof(Aluno));
-    a->curso = malloc(MAX*sizeof(char));
-    a->regime = malloc(MAX*sizeof(char));
-    a->exames_inscritos = init_nodeExame();
-
-    return a;
-}
-Exame* init_exame()
-{
-    Exame *e;
-    e = malloc(sizeof(Exame));
-    e->disciplina = malloc(sizeof(Disciplina));
-    e->disciplina->nome = malloc(MAX*sizeof(char));
-    e->disciplina->docente = malloc(MAX*sizeof(char));
-    e->epoca = malloc(MAX*sizeof(char));
-    e->sala = malloc(MAX*sizeof(char));
-    e->inscritos = 0;
-    e->alunos_inscritos = init_nodeAluno();
-
-    return e;
-}
-
-/* Funcoes para inicializar as listas ligadas (criar o primeiro node e deixar os campos a NULL) */
-Node_disciplina* init_nodeDisciplina()
-{
-    Node_disciplina *primeiro_node;
-    primeiro_node = malloc(sizeof(Node_disciplina));
-    primeiro_node->info = NULL;
-    primeiro_node->next = NULL;
-    return primeiro_node;
-}
-
-Node_aluno* init_nodeAluno()
-{
-    Node_aluno *primeiro_node;
-    primeiro_node = malloc(sizeof(Node_aluno));
-    primeiro_node->info = NULL;
-    primeiro_node->next = NULL;
-    return primeiro_node;
-}
-
-Node_exame* init_nodeExame()
-{
-    Node_exame *primeiro_node;
-    primeiro_node = malloc(sizeof(Node_exame));
-    primeiro_node->info = NULL;
-    primeiro_node->next = NULL;
-    return primeiro_node;
+    return listaD; /* Se nao encontrar entao listaD esta a NULL */
 }
 
 /* Funcoes para inserir um node na lista ligada */
