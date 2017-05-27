@@ -19,7 +19,7 @@ int main()
     print_listaExames(lista_E);
     teste = NULL;
     while (teste == NULL) {
-        printf("Cria um novo exame");
+        printf("Cria um novo exame\n");
         teste = cria_exame(lista_D, lista_E);
     }
     inserir_listaExames(lista_E, teste);

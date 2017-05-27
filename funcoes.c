@@ -13,6 +13,27 @@ void remove_barraN(char *minha_string)
     minha_string[strlen(minha_string)-1] = '\0';
 }
 
+int data_cmp(Data d1, Data d2)
+{
+    int d1num = d1.dia + d1.mes*100 + d1.ano*10000;
+    int d2num = d2.dia + d2.mes*100 + d2.ano*10000;
+
+    return d1num == d2num ? 0 : (d1num<d2num ? -1 : 1);
+}
+
+int hora_cmp(Hora h1, Hora h2)
+{
+    int h1num = h1.horas*100 + h1.minutos;
+    int h2num = h2.horas*100 + h2.minutos;
+
+    return h1num == h2num ? 0 : (h1num<h2num ? -1 : 1);
+}
+
+int exame_cheio(Exame *e)
+{
+    return e->inscritos >= 30 ? 1 : 0;
+}
+
 Hora fim_exame(Exame *e)
 {
     int overflow_hora; /* Se acontecer algo como 50 + 20 minutos entao overflow_hora = 1 */
@@ -25,6 +46,30 @@ Hora fim_exame(Exame *e)
     fim.horas += overflow_hora;
 
     return fim;
+}
+
+int exame_sobreposto(Node_exame *listaE, Exame *e)
+{
+    Hora inicio1, inicio2;
+    Hora fim1, fim2;
+
+    inicio1 = e->data.hora;
+    fim1 = fim_exame(e);
+
+    listaE = listaE->next;
+    while (listaE != NULL) {
+        if (data_cmp(listaE->info->data, e->data) == 0 && strcmp(e->sala, listaE->info->sala) == 0) {
+
+            inicio2 = listaE->info->data.hora;
+            fim2 = fim_exame(listaE->info);
+
+            /* Se o exame comecar antes do outro acabar, ou acabar depois do outro comecar */
+            if (hora_cmp(fim1, inicio2) == 1 && hora_cmp(fim2, inicio1) == 1)
+                return 1;
+        }
+        listaE = listaE->next;
+    }
+    return 0;
 }
 
 /* Funcoes para inicializar (fazer mallocs) as estruturas */
@@ -151,7 +196,7 @@ Exame* cria_exame(Node_disciplina *disciplinas_existentes, Node_exame *exames_ex
     Exame *e;
 
     char nome[MAX];
-    Node_disciplina *existe;
+    Disciplina *existe;
 
     e = init_exame();
 
@@ -161,22 +206,28 @@ Exame* cria_exame(Node_disciplina *disciplinas_existentes, Node_exame *exames_ex
     existe = procurar_listaDisciplinas(disciplinas_existentes, nome);
 
     if (existe == NULL) {
-        printf("A disciplina nao existe na base de dados\n");
+        printf("A disciplina nao existe na base de dados!\n");
         return NULL;
     }
 
-    e->disciplina = existe->info;
+    e->disciplina = existe;
 
     printf("Data\n");
     e->data = cria_data();
     printf("Duracao\n");
     e->duracao = cria_hora();
     fflush(stdin);
-    printf("Epoca: ");
-    gets(e->epoca);
-    fflush(stdin);
     printf("Sala: ");
     gets(e->sala);
+    fflush(stdin);
+
+    if (exame_sobreposto(exames_existentes, e)) {
+        printf("Fica sobreposto, a sala esta ocupada!\n");
+        return NULL;
+    }
+
+    printf("Epoca: ");
+    gets(e->epoca);
     fflush(stdin);
     return e;
 }
@@ -260,17 +311,17 @@ void print_listaExames(Node_exame *listaE)
     }
 }
 /* Funcoes para procurar nas listas ligadas */
-Node_disciplina* procurar_listaDisciplinas(Node_disciplina *listaD, char *nome)
+Disciplina* procurar_listaDisciplinas(Node_disciplina *listaD, char *nome)
 {
     listaD = listaD->next;
     while (listaD != NULL) {
         if (strcmp(nome, listaD->info->nome) == 0)
-            break;
+            return listaD->info;
         else
             listaD = listaD->next;
     }
 
-    return listaD; /* Se nao encontrar entao listaD esta a NULL */
+    return NULL; /* Se nao encontrar entao retorna NULL */
 }
 
 /* Funcoes para inserir um node na lista ligada */
