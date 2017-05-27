@@ -72,6 +72,18 @@ int exame_sobreposto(Node_exame *listaE, Exame *e)
     return 0;
 }
 
+int pode_inscrever(Aluno *a, Exame *e)
+{
+    if (strcmp(e->epoca, "Especial") == 0) {
+        if (strcmp(a->regime, "Estudante") != 0 || a->matricula >= 3)
+            return 1;
+        else
+            return 0;
+    }
+    else
+        return 1;
+}
+
 /* Funcoes para inicializar (fazer mallocs) as estruturas */
 Disciplina* init_disciplina()
 {
@@ -256,7 +268,7 @@ void print_aluno(Aluno *a)
     printf("Matricula:\t%d\n", a->matricula);
     printf("Curso:\t\t%s\n", a->curso);
     printf("Regime:\t\t%s\n", a->regime);
-    print_listaExames(a->exames_inscritos);
+    /*print_listaExames(a->exames_inscritos);*/
 }
 
 void print_exame(Exame *e)
@@ -267,7 +279,7 @@ void print_exame(Exame *e)
     print_hora(e->duracao);
     printf("Epoca:\t\t%s\n", e->epoca);
     printf("Sala:\t\t%s\n", e->sala);
-    print_listaAlunos(e->alunos_inscritos);
+    /*print_listaAlunos(e->alunos_inscritos);*/
 }
 
 void print_listaDisciplinas(Node_disciplina *listaD)
@@ -320,8 +332,33 @@ Disciplina* procurar_listaDisciplinas(Node_disciplina *listaD, char *nome)
         else
             listaD = listaD->next;
     }
-
     return NULL; /* Se nao encontrar entao retorna NULL */
+}
+
+Aluno* procurar_listaAlunos(Node_aluno *listaA, int id)
+{
+    listaA = listaA->next;
+    while (listaA != NULL) {
+        if (listaA->info->id == id)
+            return listaA->info;
+        else
+            listaA = listaA->next;
+    }
+    return NULL;
+}
+
+Exame* procurar_listaExames(Node_exame *listaE, Data data, char *sala)
+{
+    listaE = listaE->next;
+    while (listaE != NULL) {
+        if (data_cmp(listaE->info->data, data) == 0
+        && hora_cmp(listaE->info->data.hora, data.hora) == 0
+        && strcmp(listaE->info->sala, sala) == 0)
+            return listaE->info;
+        else
+            listaE = listaE->next;
+    }
+    return NULL;
 }
 
 /* Funcoes para inserir um node na lista ligada */
@@ -525,4 +562,12 @@ Node_exame* ler_exames(char *ficheiro)
     }
     fclose(txt);
     return listaE;
+}
+
+/* Funcoes de funcionalidade */
+void inscrever(Aluno *a, Exame *e)
+{
+    inserir_listaExames(a->exames_inscritos, e);
+    inserir_listaAlunos(e->alunos_inscritos, a);
+    e->inscritos += 1;
 }

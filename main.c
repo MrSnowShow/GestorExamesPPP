@@ -9,22 +9,32 @@ int main()
     Node_aluno *lista_A;
     Node_exame *lista_E;
 
-    Exame *teste;
+    Aluno *testeA;
+    Exame *testeE;
+    Data testeData;
 
     lista_D = ler_disciplinas("disciplinas.txt");
     lista_A = ler_alunos("alunos.txt");
     lista_E = ler_exames("exames.txt");
 
-    printf("\tANTES\n");
-    print_listaExames(lista_E);
-    teste = NULL;
-    while (teste == NULL) {
-        printf("Cria um novo exame\n");
-        teste = cria_exame(lista_D, lista_E);
-    }
-    inserir_listaExames(lista_E, teste);
-    printf("\tDEPOIS\n");
-    print_listaExames(lista_E);
+    testeData = cria_data();
+
+    testeA = procurar_listaAlunos(lista_A, 128);
+    testeE = procurar_listaExames(lista_E, testeData, "C5.4");
+
+    printf("************ANTES*************\n");
+    print_aluno(testeA);
+    print_exame(testeE);
+
+    if (pode_inscrever(testeA, testeE))
+        inscrever(testeA, testeE);
+    else
+        printf("Nao pode!\n");
+
+    printf("************DEPOIS*************\n");
+    print_listaAlunos(testeE->alunos_inscritos);
+    print_listaExames(testeA->exames_inscritos);
+
 
     return 0;
 }

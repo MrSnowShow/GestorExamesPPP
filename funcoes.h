@@ -7,7 +7,8 @@ int data_cmp(Data d1, Data d2);
 int hora_cmp(Hora h1, Hora h2);
 int exame_cheio(Exame *e);
 Hora fim_exame(Exame *e);
-int exame_sobreposto(Node_exame *listaE, Exame *e); /* return 1 se sim, 0 se nao */
+int exame_sobreposto(Node_exame *listaE, Exame *e);
+int pode_inscrever(Aluno *a, Exame *e);
 
 /* Funcoes para inicializar (fazer mallocs) as estruturas de pointeiros */
 Disciplina* init_disciplina();
@@ -40,6 +41,8 @@ void print_listaExames(Node_exame *listaE);
 
 /* Funcoes para procurar nas listas ligadas */
 Disciplina* procurar_listaDisciplinas(Node_disciplina *listaD, char *nome);
+Aluno* procurar_listaAlunos(Node_aluno *listaA, int id);
+Exame* procurar_listaExames(Node_exame *listaE, Data data, char *sala);
 
 /* Funcoes para inserir nas listas ligadas */
 void inserir_listaDisciplinas(Node_disciplina *listaD, Disciplina *novaD);
@@ -55,6 +58,6 @@ Node_aluno* ler_alunos(char *ficheiro);
 Node_exame* ler_exames(char *ficheiro);
 
 /* Funcoes de funcionalidade */
-void inscrever(Aluno *a, Node_exame);
+void inscrever(Aluno *a, Exame *e);
 
 #endif /* FUNCOES_H_INCLUDED */
