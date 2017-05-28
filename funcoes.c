@@ -376,7 +376,17 @@ Exame* procurar_listaExames(Node_exame *listaE, Data data, char *sala)
     return NULL;
 }
 
-/* Funcoes para inserir um node na lista ligada */
+/* Funcoes para alterar as informacoes */
+void alterar_disciplina(Node_disciplina *disciplinas_existentes, Disciplina *alterada)
+{
+    free(alterada);
+    alterada = NULL;
+    while (alterada == NULL) {
+        alterada = cria_disciplina(disciplinas_existentes);
+    }
+}
+
+/* Funcoes para inserir na lista ligada */
 void inserir_listaDisciplinas(Node_disciplina *listaD, Disciplina *novaDisciplina)
 {
     Node_disciplina *novo_node;
@@ -429,6 +439,21 @@ void remover_listaDisciplinas(Node_disciplina *listaD, char *nome)
     anterior->next = listaD->next;
     free(listaD);
 
+}
+
+void remover_listaAlunos(Node_aluno *listaA, int id)
+{
+    Node_aluno *anterior;
+    anterior = listaA;
+    listaA = listaA->next;
+
+    while (listaA->info->id != id) {
+        anterior = anterior->next;
+        listaA = listaA->next;
+    }
+
+    anterior->next = listaA->next;
+    free(listaA);
 }
 
 /* funcoes para ler ficheiros */

@@ -44,6 +44,9 @@ Disciplina* procurar_listaDisciplinas(Node_disciplina *listaD, char *nome);
 Aluno* procurar_listaAlunos(Node_aluno *listaA, int id);
 Exame* procurar_listaExames(Node_exame *listaE, Data data, char *sala);
 
+/* Funcoes para alterar as informacoes */
+void alterar_disciplina(Node_disciplina *disciplinas_existentes, Disciplina *alterada);
+
 /* Funcoes para inserir nas listas ligadas */
 void inserir_listaDisciplinas(Node_disciplina *listaD, Disciplina *novaD);
 void inserir_listaAlunos(Node_aluno *listaA, Aluno *novoA);
