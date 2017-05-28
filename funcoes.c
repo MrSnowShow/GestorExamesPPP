@@ -362,13 +362,12 @@ Aluno* procurar_listaAlunos(Node_aluno *listaA, int id)
     return NULL;
 }
 
-Exame* procurar_listaExames(Node_exame *listaE, Data data, char *sala)
+Exame* procurar_listaExames(Node_exame *listaE, Data data)
 {
     listaE = listaE->next;
     while (listaE != NULL) {
         if (data_cmp(listaE->info->data, data) == 0
-        && hora_cmp(listaE->info->data.hora, data.hora) == 0
-        && strcmp(listaE->info->sala, sala) == 0)
+        && hora_cmp(listaE->info->data.hora, data.hora) == 0)
             return listaE->info;
         else
             listaE = listaE->next;
@@ -454,6 +453,20 @@ void remover_listaAlunos(Node_aluno *listaA, int id)
 
     anterior->next = listaA->next;
     free(listaA);
+}
+
+void remover_listaExames(Node_exame *listaE, Data data)
+{
+    Node_exame *anterior;
+    anterior = listaE;
+    listaE = listaE->next;
+
+    while (data_cmp(listaE->info->data, data) != 0 && hora_cmp(listaE->info->data.hora, data.hora)) {
+        anterior = anterior->next;
+        listaE = listaE->next;
+    }
+    anterior->next = listaE->next;
+    free(listaE);
 }
 
 /* funcoes para ler ficheiros */
@@ -610,4 +623,11 @@ void inscrever(Aluno *a, Exame *e)
     inserir_listaExames(a->exames_inscritos, e);
     inserir_listaAlunos(e->alunos_inscritos, a);
     e->inscritos += 1;
+}
+
+void desinscrever(Aluno *a, Exame *e)
+{
+    remover_listaAlunos(e->alunos_inscritos, a->id);
+    remover_listaExames(a->exames_inscritos, e->data);
+    e->inscritos -= 1;
 }

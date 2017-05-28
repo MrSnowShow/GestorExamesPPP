@@ -42,7 +42,7 @@ void print_listaExames(Node_exame *listaE);
 /* Funcoes para procurar nas listas ligadas */
 Disciplina* procurar_listaDisciplinas(Node_disciplina *listaD, char *nome);
 Aluno* procurar_listaAlunos(Node_aluno *listaA, int id);
-Exame* procurar_listaExames(Node_exame *listaE, Data data, char *sala);
+Exame* procurar_listaExames(Node_exame *listaE, Data data);
 
 /* Funcoes para alterar as informacoes */
 void alterar_disciplina(Node_disciplina *disciplinas_existentes, Disciplina *alterada);
@@ -54,6 +54,8 @@ void inserir_listaExames(Node_exame *listaE, Exame *novoE);
 
 /* Funcoes para remover da lista ligada */
 void remover_listaDisciplinas(Node_disciplina *listaD, char *nome);
+void remover_listaAlunos(Node_aluno *listaA, int id);
+void remover_listaExames(Node_exame *listaE, Data data);
 
 /* Funcoes para ler dos ficheiros */
 Node_disciplina* ler_disciplinas(char *ficheiro);
@@ -62,5 +64,6 @@ Node_exame* ler_exames(char *ficheiro);
 
 /* Funcoes de funcionalidade */
 void inscrever(Aluno *a, Exame *e);
+void desinscrever(Aluno *a, Exame *e);
 
 #endif /* FUNCOES_H_INCLUDED */

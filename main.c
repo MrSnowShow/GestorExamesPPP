@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "structs.h"
 #include "funcoes.h"
-/*
+
 int main()
 {
     Node_disciplina *lista_D;
@@ -20,7 +20,7 @@ int main()
     testeData = cria_data();
 
     testeA = procurar_listaAlunos(lista_A, 128);
-    testeE = procurar_listaExames(lista_E, testeData, "C5.4");
+    testeE = procurar_listaExames(lista_E, testeData);
 
     printf("************ANTES*************\n");
     print_aluno(testeA);
@@ -35,11 +35,16 @@ int main()
     print_listaAlunos(testeE->alunos_inscritos);
     print_listaExames(testeA->exames_inscritos);
 
+    printf("*********AGORA VAMOS DESINSCREVER*******\n");
+    desinscrever(testeA, testeE);
+    print_listaAlunos(testeE->alunos_inscritos);
+    print_listaExames(testeA->exames_inscritos);
+
 
     return 0;
 }
 
-*/
+/*
 
 int main()
 {
@@ -59,7 +64,7 @@ int main()
     alterar_disciplina(lista_D, testeD);
     print_disciplina(testeD);
     return 0;
-}
+}*/
 
 
 /*
