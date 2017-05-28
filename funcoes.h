@@ -3,8 +3,8 @@
 
 /* Funcoes auxiliares */
 void remove_barraN(char *minha_string);
-int data_cmp(Data d1, Data d2);
-int hora_cmp(Hora h1, Hora h2);
+int data_cmp(Data d1, Data d2);  /* Ambos retornam como o strcmp() */
+int hora_cmp(Hora h1, Hora h2);  /* -1 se 1<2, 1 se 1==2 e 1 se 1>2 */
 int exame_cheio(Exame *e);
 Hora fim_exame(Exame *e);
 int exame_sobreposto(Node_exame *listaE, Exame *e);
@@ -23,8 +23,8 @@ Node_exame* init_nodeExame();
 /* Funcoes para criar as estruturas apartir do utilizador */
 Hora cria_hora();
 Data cria_data();
-Disciplina* cria_disciplina();
-Aluno* cria_aluno();
+Disciplina* cria_disciplina(Node_disciplina *disciplinas_existentes);
+Aluno* cria_aluno(Node_aluno *alunos_existentes);
 Exame* cria_exame(Node_disciplina *disciplinas_existentes, Node_exame *exames_existentes);
 
 /* Funcoes de print das estruturas */

@@ -20,7 +20,7 @@ int main()
     testeData = cria_data();
 
     testeA = procurar_listaAlunos(lista_A, 128);
-    testeE = procurar_listaExames(lista_E, testeData, "C5.4");
+    testeE = procurar_listaExames(lista_E, testeData, "C5.6");
 
     printf("************ANTES*************\n");
     print_aluno(testeA);
@@ -38,6 +38,25 @@ int main()
 
     return 0;
 }
+
+/*
+
+int main()
+{
+    Node_disciplina *lista_D;
+    Node_aluno *lista_A;
+    Node_exame *lista_E;
+
+    Aluno *testeA;
+    Disciplina *testeD;
+
+    lista_D = ler_disciplinas("disciplinas.txt");
+    lista_A = ler_alunos("alunos.txt");
+    lista_E = ler_exames("exames.txt");
+
+    testeA = cria_aluno(lista_A);
+    testeD = cria_disciplina(lista_D);
+}*/
 
 
 /*

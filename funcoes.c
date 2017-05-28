@@ -170,27 +170,42 @@ Data cria_data()
     return d;
 }
 
-Disciplina* cria_disciplina()
+Disciplina* cria_disciplina(Node_disciplina *disciplinas_existentes)
 {
-    Disciplina *d;
+    Disciplina *d, *existe;
     d = init_disciplina();
 
     printf("Nome: ");
     gets(d->nome);
+
+    existe = procurar_listaDisciplinas(disciplinas_existentes, d->nome);
     fflush(stdin);
+    if (existe) {
+        printf("Ja existe uma disciplina com esse nome!\n");
+        return NULL;
+    }
+
     printf("Docente: ");
     gets(d->docente);
     fflush(stdin);
     return d;
 }
 
-Aluno* cria_aluno()
+Aluno* cria_aluno(Node_aluno *alunos_existentes)
 {
-    Aluno *a;
+    Aluno *a, *existe;
     a = init_aluno();
 
     printf("ID: ");
     scanf("%d", &a->id);
+
+    existe = procurar_listaAlunos(alunos_existentes, a->id);
+    fflush(stdin);
+    if (existe) {
+        printf("Ja existe um aluno com esse id!\n");
+        return NULL;
+    }
+
     printf("Matricula: ");
     scanf("%d", &a->matricula);
     fflush(stdin);
