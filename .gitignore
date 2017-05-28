@@ -48,5 +48,5 @@
 ## Code::Blocks  
 #################  
 
-*.depend  
-*.layout
+##*.depend  
+##*.layout
