@@ -32,10 +32,8 @@
 *.dSYM/
 *.su
 
-[Bb]in/*  
-![Bb]in/data/  
-[Bb]uild/  
-[Oo]bj/  
+[Bb]in/Debug/*
+[Oo]bj/Debug/*
 *.o  
 [Dd]ebug*/  
 [Rr]elease*/  
