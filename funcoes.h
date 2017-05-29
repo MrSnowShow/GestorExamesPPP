@@ -61,7 +61,7 @@ void remover_listaExames(Node_exame *listaE, Data data);
 /* Funcoes para ler dos ficheiros */
 Node_disciplina* ler_disciplinas(char *ficheiro);
 Node_aluno* ler_alunos(char *ficheiro);
-Node_exame* ler_exames(char *ficheiro);
+Node_exame* ler_exames(char *ficheiro, Node_disciplina *disciplinas_existentes);
 
 /* Funcoes de funcionalidade */
 void inscrever(Aluno *a, Exame *e);

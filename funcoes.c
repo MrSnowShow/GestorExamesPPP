@@ -586,7 +586,7 @@ Node_aluno* ler_alunos(char *ficheiro)
     return listaA;
 }
 
-Node_exame* ler_exames(char *ficheiro)
+Node_exame* ler_exames(char *ficheiro, Node_disciplina *disciplinas_existentes)
 {
     FILE *txt;
     Exame *e;
@@ -601,14 +601,12 @@ Node_exame* ler_exames(char *ficheiro)
     while (strcmp(linha, "")) {
         if (strcmp(linha, "-") == 0) {
             e = init_exame();
-            /* Disciplinas */
+            /* Disciplinas (pesquisa nas disciplinas_existentes) */
             fgets(linha, MAX, txt);
             remove_barraN(linha);
-            strcpy(e->disciplina->nome, linha);
 
-            fgets(linha, MAX, txt);
-            remove_barraN(linha);
-            strcpy(e->disciplina->docente, linha);
+            e->disciplina = procurar_listaDisciplinas(disciplinas_existentes, linha);
+
             /* Data */
             fgets(linha, MAX, txt);
             remove_barraN(linha);

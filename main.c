@@ -24,7 +24,7 @@ int main()
 
     lista_D = ler_disciplinas("disciplinas.txt");
     lista_A = ler_alunos("alunos.txt");
-    lista_E = ler_exames("exames.txt");
+    lista_E = ler_exames("exames.txt", lista_D);
 
     while(input != 0) {
         printf("\n");

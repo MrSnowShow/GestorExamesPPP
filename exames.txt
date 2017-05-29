@@ -1,6 +1,5 @@
 -
 AED
-Joao
 1
 6
 2017
@@ -12,7 +11,6 @@ Normal
 C5.4
 -
 PPP
-Ze
 2
 6
 2017
@@ -24,7 +22,6 @@ Recurso
 C5.5
 -
 MULT
-Xico
 3
 6
 2017
@@ -36,7 +33,6 @@ Especial
 C5.6
 -
 Astronomia I
-Meleiro
 4
 6
 2017
@@ -48,7 +44,6 @@ Normal
 C5.1
 -
 Astronomia II
-Roman
 1
 6
 2017
