@@ -378,11 +378,35 @@ Exame* procurar_listaExames(Node_exame *listaE, Data data)
 /* Funcoes para alterar as informacoes */
 void alterar_disciplina(Node_disciplina *disciplinas_existentes, Disciplina *alterada)
 {
-    free(alterada);
-    alterada = NULL;
-    while (alterada == NULL) {
-        alterada = cria_disciplina(disciplinas_existentes);
-    }
+    Disciplina *temporaria;
+
+    strcpy(alterada->nome, "temporario");
+    printf("Novas informacoes\n");
+    temporaria = cria_disciplina(disciplinas_existentes);
+
+    strcpy(alterada->nome, temporaria->nome);
+    strcpy(alterada->docente, temporaria->docente);
+
+    free(temporaria->nome);
+    free(temporaria->docente);
+    free(temporaria);
+}
+void alterar_aluno(Node_aluno *alunos_existentes, Aluno *alterado)
+{
+    Aluno *temporario;
+
+    alterado->id = -129591; /* mudamos o id para o cria_aluno() nao detectar se quiser deixar id igual */
+    printf("Novas infomacoes\n");
+    temporario = cria_aluno(alunos_existentes);
+
+    alterado->id = temporario->id;
+    alterado->matricula = temporario->matricula;
+    strcpy(alterado->curso, temporario->curso);
+    strcpy(alterado->regime, temporario->regime);
+
+    free(temporario->curso);
+    free(temporario->regime);
+    free(temporario);
 }
 
 /* Funcoes para inserir na lista ligada */
@@ -436,6 +460,10 @@ void remover_listaDisciplinas(Node_disciplina *listaD, char *nome)
     }
 
     anterior->next = listaD->next;
+
+    free(listaD->info->nome);
+    free(listaD->info->docente);
+    free(listaD->info);
     free(listaD);
 
 }
@@ -452,6 +480,10 @@ void remover_listaAlunos(Node_aluno *listaA, int id)
     }
 
     anterior->next = listaA->next;
+
+    free(listaA->info->curso);
+    free(listaA->info->regime);
+    free(listaA->info);
     free(listaA);
 }
 
@@ -466,6 +498,12 @@ void remover_listaExames(Node_exame *listaE, Data data)
         listaE = listaE->next;
     }
     anterior->next = listaE->next;
+    free(listaE->info->disciplina->nome);
+    free(listaE->info->disciplina->docente);
+    free(listaE->info->disciplina);
+    free(listaE->info->epoca);
+    free(listaE->info->sala);
+    free(listaE->info);
     free(listaE);
 }
 

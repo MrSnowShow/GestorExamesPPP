@@ -44,6 +44,7 @@ int main()
         printf("14 - Salas reservadas para dado exame:\n");
         printf("0 - Sair.\n");
         scanf("%d", &input);
+        fflush(stdin);
         switch (input) {
             case 1:
                 user_aluno = NULL;
@@ -53,6 +54,16 @@ int main()
                 inserir_listaAlunos(lista_A, user_aluno);
                 break;
             case 2:
+                printf("ID do aluno a alterar: ");
+                scanf("%d", &user_id);
+
+                user_aluno = procurar_listaAlunos(lista_A, user_id);
+                if (user_aluno == NULL) {
+                    printf("\nAluno nao encontrado!\n");
+                    break;
+                } else {
+                    alterar_aluno(lista_A, user_aluno);
+                }
                 break;
             case 3:
                 printf("ID do aluno a apagar: ");
@@ -67,6 +78,17 @@ int main()
                 inserir_listaDisciplinas(lista_D, user_disciplina);
                 break;
             case 5:
+                printf("Nome da disciplina a alterar: ");
+                gets(user_string);
+                fflush(stdin);
+                user_disciplina = procurar_listaDisciplinas(lista_D, user_string);
+                if (user_disciplina == NULL) {
+                    printf("Disciplina nao existe!\n");
+                    break;
+                } else {
+                    alterar_disciplina(lista_D, user_disciplina);
+                }
+                print_listaDisciplinas(lista_D);
                 break;
             case 6:
                 printf("Nome da disciplina a apagar: ");
@@ -93,25 +115,25 @@ int main()
                 user_data = cria_data();
 
                 user_aluno = procurar_listaAlunos(lista_A, user_id);
-                if (user_aluno == NULL)
+                if (user_aluno == NULL) {
                     printf("\nAluno nao encontrado!\n");
-
-                user_exame = procurar_listaExames(lista_E, user_data);
-                if (user_exame == NULL)
-                    printf("\nExame nao encontrado!\n");
-
-                if (user_aluno != NULL && user_exame != NULL) {
-                    if (exame_cheio(user_exame)) {
-                        printf("\nExame cheio!\n");
-                        break;
-                    }
-                    if (!pode_inscrever(user_aluno, user_exame)) {
-                        printf("\nNao pode inscrever neste exame!\n");
-                        break;
-                    }
-                    inscrever(user_aluno, user_exame);
-                    printf("\nInscrito!\n");
+                    break;
                 }
+                user_exame = procurar_listaExames(lista_E, user_data);
+                if (user_exame == NULL) {
+                    printf("\nExame nao encontrado!\n");
+                    break;
+                }
+                if (exame_cheio(user_exame)) {
+                    printf("\nExame cheio!\n");
+                    break;
+                }
+                if (!pode_inscrever(user_aluno, user_exame)) {
+                    printf("\nNao pode inscrever neste exame!\n");
+                    break;
+                }
+                inscrever(user_aluno, user_exame);
+                printf("\nInscrito!\n");
                 break;
             case 11:
                 printf("ID do aluno a desinscrever: ");
