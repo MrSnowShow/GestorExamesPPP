@@ -66,5 +66,6 @@ Node_exame* ler_exames(char *ficheiro, Node_disciplina *disciplinas_existentes);
 /* Funcoes de funcionalidade */
 void inscrever(Aluno *a, Exame *e);
 void desinscrever(Aluno *a, Exame *e);
+void apagar_exames(Node_exame *listaE, Data data);
 
 #endif /* FUNCOES_H_INCLUDED */

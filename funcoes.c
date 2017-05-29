@@ -465,7 +465,6 @@ void remover_listaDisciplinas(Node_disciplina *listaD, char *nome)
     free(listaD->info->docente);
     free(listaD->info);
     free(listaD);
-
 }
 
 void remover_listaAlunos(Node_aluno *listaA, int id)
@@ -483,6 +482,7 @@ void remover_listaAlunos(Node_aluno *listaA, int id)
 
     free(listaA->info->curso);
     free(listaA->info->regime);
+    free(listaA->info->exames_inscritos);
     free(listaA->info);
     free(listaA);
 }
@@ -493,7 +493,7 @@ void remover_listaExames(Node_exame *listaE, Data data)
     anterior = listaE;
     listaE = listaE->next;
 
-    while (data_cmp(listaE->info->data, data) != 0 && hora_cmp(listaE->info->data.hora, data.hora)) {
+    while (data_cmp(listaE->info->data, data) != 0 && hora_cmp(listaE->info->data.hora, data.hora) != 0) {
         anterior = anterior->next;
         listaE = listaE->next;
     }
@@ -503,6 +503,7 @@ void remover_listaExames(Node_exame *listaE, Data data)
     free(listaE->info->disciplina);
     free(listaE->info->epoca);
     free(listaE->info->sala);
+    free(listaE->info->alunos_inscritos);
     free(listaE->info);
     free(listaE);
 }
@@ -666,4 +667,28 @@ void desinscrever(Aluno *a, Exame *e)
     remover_listaAlunos(e->alunos_inscritos, a->id);
     remover_listaExames(a->exames_inscritos, e->data);
     e->inscritos -= 1;
+}
+
+void apagar_exames(Node_exame *listaE, Data data)
+{
+    Node_exame *head;
+    head = listaE; /* Precisa-se para o argumento do remover */
+
+    listaE = listaE->next;
+
+    while (listaE != NULL) {
+        if (data_cmp(listaE->info->data, data) <= 0) {
+            /* Tem que desinscrever os alunos todos desse exame */
+            listaE->info->alunos_inscritos = listaE->info->alunos_inscritos->next;
+            if (listaE->info->alunos_inscritos != NULL) {
+                while (listaE->info->alunos_inscritos != NULL) {
+                    remover_listaExames(listaE->info->alunos_inscritos->info->exames_inscritos, listaE->info->data);
+                    listaE->info->alunos_inscritos = listaE->info->alunos_inscritos->next;
+                }
+            }
+            /* Por fim remove o exame da lista de exames */
+            remover_listaExames(head, listaE->info->data);
+        }
+        listaE = listaE->next;
+    }
 }

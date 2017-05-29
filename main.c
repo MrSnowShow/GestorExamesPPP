@@ -28,21 +28,21 @@ int main()
 
     while(input != 0) {
         printf("\n");
-        printf("1 - Criar aluno:\n");
-        printf("2 - Alterar aluno:\n");
-        printf("3 - Apagar aluno:\n");
-        printf("4 - Criar uma disciplina:\n");
-        printf("5 - Alterar uma disciplina:\n");
-        printf("6 - Apagar uma disciplina:\n");
-        printf("7 - Criar um exame:\n");
-        printf("8 - Apagar exames realizados:\n");
-        printf("9 - Listar exames:\n");
-        printf("10 - Increver aluno num exame:\n");
-        printf("11 - Desinscrever aluno dum exame:\n");
-        printf("12 - Lista de alunos inscritos num dado exame:\n");
-        printf("13 - Lista de exames que um dado aluno esta inscrito:\n");
-        printf("14 - Salas reservadas para dado exame:\n");
-        printf("0 - Sair.\n");
+        printf("1 - Criar aluno\n");
+        printf("2 - Alterar aluno\n");
+        printf("3 - Apagar aluno\n\n");
+        printf("4 - Criar uma disciplina\n");
+        printf("5 - Alterar uma disciplina\n");
+        printf("6 - Apagar uma disciplina\n\n");
+        printf("7 - Criar um exame\n");
+        printf("8 - Apagar exames realizados\n");
+        printf("9 - Listar exames\n\n");
+        printf("10 - Increver aluno num exame\n");
+        printf("11 - Desinscrever aluno dum exame\n\n");
+        printf("12 - Lista de alunos inscritos num dado exame\n");
+        printf("13 - Lista de exames que um dado aluno esta inscrito\n");
+        printf("14 - Salas reservadas para dado exame\n\n");
+        printf("0 - Sair\n");
         scanf("%d", &input);
         fflush(stdin);
         switch (input) {
@@ -52,8 +52,10 @@ int main()
                     user_aluno = cria_aluno(lista_A);
                 }
                 inserir_listaAlunos(lista_A, user_aluno);
+                print_listaAlunos(lista_A);
                 break;
             case 2:
+                print_listaAlunos(lista_A);
                 printf("ID do aluno a alterar: ");
                 scanf("%d", &user_id);
 
@@ -64,11 +66,14 @@ int main()
                 } else {
                     alterar_aluno(lista_A, user_aluno);
                 }
+                print_listaAlunos(lista_A);
                 break;
             case 3:
+                print_listaAlunos(lista_A);
                 printf("ID do aluno a apagar: ");
                 scanf("%d", &user_id);
                 remover_listaAlunos(lista_A, user_id);
+                print_listaAlunos(lista_A);
                 break;
             case 4:
                 user_disciplina = NULL;
@@ -76,8 +81,10 @@ int main()
                     user_disciplina = cria_disciplina(lista_D);
                 }
                 inserir_listaDisciplinas(lista_D, user_disciplina);
+                print_listaDisciplinas(lista_D);
                 break;
             case 5:
+                print_listaDisciplinas(lista_D);
                 printf("Nome da disciplina a alterar: ");
                 gets(user_string);
                 fflush(stdin);
@@ -91,10 +98,12 @@ int main()
                 print_listaDisciplinas(lista_D);
                 break;
             case 6:
+                print_listaDisciplinas(lista_D);
                 printf("Nome da disciplina a apagar: ");
                 gets(user_string);
                 fflush(stdin);
                 remover_listaDisciplinas(lista_D, user_string);
+                print_listaDisciplinas(lista_D);
                 break;
             case 7:
                 user_exame = NULL;
@@ -102,8 +111,12 @@ int main()
                     user_exame = cria_exame(lista_D, lista_E);
                 }
                 inserir_listaExames(lista_E, user_exame);
+                print_listaExames(lista_E);
                 break;
             case 8:
+                printf("Data dos exames a apagar (inclusive)\n");
+                user_data = cria_data();
+                apagar_exames(lista_E, user_data);
                 break;
             case 9:
                 print_listaExames(lista_E);
@@ -174,8 +187,6 @@ int main()
                 break;
             case 14:
                 break;
-
-
         }
     }
     return 0;
@@ -194,34 +205,19 @@ int main()
 
     lista_D = ler_disciplinas("disciplinas.txt");
     lista_A = ler_alunos("alunos.txt");
-    lista_E = ler_exames("exames.txt");
+    lista_E = ler_exames("exames.txt", lista_D);
 
     testeData = cria_data();
 
-    testeA = procurar_listaAlunos(lista_A, 128);
-    testeE = procurar_listaExames(lista_E, testeData);
-
     printf("************ANTES*************\n");
-    print_aluno(testeA);
-    print_exame(testeE);
-
-    if (pode_inscrever(testeA, testeE))
-        inscrever(testeA, testeE);
-    else
-        printf("Nao pode!\n");
+    print_listaExames(lista_E);
 
     printf("************DEPOIS*************\n");
-    print_listaAlunos(testeE->alunos_inscritos);
-    print_listaExames(testeA->exames_inscritos);
-
-    printf("*********AGORA VAMOS DESINSCREVER*******\n");
-    desinscrever(testeA, testeE);
-    print_listaAlunos(testeE->alunos_inscritos);
-    print_listaExames(testeA->exames_inscritos);
-
+    remover_listaExames(lista_E, testeData);
+    print_listaExames(lista_E);
 
     return 0;
-}*/
+} */
 
 /*
 
