@@ -114,24 +114,36 @@ int main()
                 print_listaExames(lista_E);
                 break;
             case 8:
+                print_listaExames(lista_E);
                 printf("Data dos exames a apagar (inclusive)\n");
                 user_data = cria_data();
                 apagar_exames(lista_E, user_data);
+                print_listaExames(lista_E);
                 break;
             case 9:
                 print_listaExames(lista_E);
                 break;
             case 10:
+                print_listaAlunos(lista_A);
                 printf("ID do aluno a inscrever: ");
                 scanf("%d", &user_id);
-                printf("Data do exame a realizar\n");
-                user_data = cria_data();
 
                 user_aluno = procurar_listaAlunos(lista_A, user_id);
                 if (user_aluno == NULL) {
                     printf("\nAluno nao encontrado!\n");
                     break;
                 }
+
+                print_listaExames(lista_E);
+                printf("Data do exame a realizar\n");
+                user_data = cria_data();
+
+                user_exame = procurar_listaExames(user_aluno->exames_inscritos, user_data);
+                if (user_exame != NULL) {
+                    printf("Ja esta inscrito!\n");
+                    break;
+                }
+
                 user_exame = procurar_listaExames(lista_E, user_data);
                 if (user_exame == NULL) {
                     printf("\nExame nao encontrado!\n");
@@ -147,25 +159,33 @@ int main()
                 }
                 inscrever(user_aluno, user_exame);
                 printf("\nInscrito!\n");
+                print_listaExames(user_aluno->exames_inscritos);
                 break;
             case 11:
+                print_listaAlunos(lista_A);
                 printf("ID do aluno a desinscrever: ");
                 scanf("%d", &user_id);
+
+                user_aluno = procurar_listaAlunos(lista_A, user_id);
+                if (user_aluno == NULL) {
+                    printf("\nAluno nao encontrado!\n");
+                    break;
+                }
+                printf("Exames inscritos:\n");
+                print_listaExames(user_aluno->exames_inscritos);
                 printf("Data do exame a desinscrever\n");
                 user_data = cria_data();
 
-                user_aluno = procurar_listaAlunos(lista_A, user_id);
-                if (user_aluno == NULL)
-                    printf("\nAluno nao encontrado!\n");
-
                 user_exame = procurar_listaExames(lista_E, user_data);
-                if (user_exame == NULL)
+                if (user_exame == NULL) {
                     printf("\nExame nao encontrado!\n");
-
-                if (user_aluno != NULL && user_exame != NULL)
-                    desinscrever(user_aluno, user_exame);
+                    break;
+                }
+                desinscrever(user_aluno, user_exame);
+                print_listaExames(user_aluno->exames_inscritos);
                 break;
             case 12:
+                print_listaExames(lista_E);
                 printf("Data do exame\n");
                 user_data = cria_data();
                 user_exame = procurar_listaExames(lista_E, user_data);
@@ -176,6 +196,7 @@ int main()
 
                 break;
             case 13:
+                print_listaAlunos(lista_A);
                 printf("ID do aluno: ");
                 scanf("%d", &user_id);
                 user_aluno = procurar_listaAlunos(lista_A, user_id);
@@ -186,57 +207,19 @@ int main()
 
                 break;
             case 14:
+                print_listaExames(lista_E);
+                printf("Data do exame\n");
+                user_data = cria_data();
+
+                user_exame = procurar_listaExames(lista_E, user_data);
+                if (user_exame == NULL) {
+                    printf("\nExame nao encontrado!\n");
+                    break;
+                }
+                printf("\nSala %s esta a %d/30\n", user_exame->sala, user_exame->inscritos);
+
                 break;
         }
     }
     return 0;
 }
-
-/*
-int main()
-{
-    Node_disciplina *lista_D;
-    Node_aluno *lista_A;
-    Node_exame *lista_E;
-
-    Aluno *testeA;
-    Exame *testeE;
-    Data testeData;
-
-    lista_D = ler_disciplinas("disciplinas.txt");
-    lista_A = ler_alunos("alunos.txt");
-    lista_E = ler_exames("exames.txt", lista_D);
-
-    testeData = cria_data();
-
-    printf("************ANTES*************\n");
-    print_listaExames(lista_E);
-
-    printf("************DEPOIS*************\n");
-    remover_listaExames(lista_E, testeData);
-    print_listaExames(lista_E);
-
-    return 0;
-} */
-
-/*
-
-int main()
-{
-    Node_disciplina *lista_D;
-    Node_aluno *lista_A;
-    Node_exame *lista_E;
-
-    Aluno *testeA;
-    Disciplina *testeD;
-
-    lista_D = ler_disciplinas("disciplinas.txt");
-    lista_A = ler_alunos("alunos.txt");
-    lista_E = ler_exames("exames.txt");
-
-    testeD = procurar_listaDisciplinas(lista_D, "AED");
-    print_disciplina(testeD);
-    alterar_disciplina(lista_D, testeD);
-    print_disciplina(testeD);
-    return 0;
-}*/

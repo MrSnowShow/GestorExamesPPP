@@ -75,7 +75,7 @@ int exame_sobreposto(Node_exame *listaE, Exame *e)
 int pode_inscrever(Aluno *a, Exame *e)
 {
     if (strcmp(e->epoca, "Especial") == 0) {
-        if (strcmp(a->regime, "Estudante") != 0 || a->matricula >= 3)
+        if (strcmp(a->regime, "Estudante") != 0 || strcmp(a->regime, "Erasmus") != 0 || a->matricula >= 3)
             return 1;
         else
             return 0;
@@ -406,6 +406,7 @@ void alterar_aluno(Node_aluno *alunos_existentes, Aluno *alterado)
 
     free(temporario->curso);
     free(temporario->regime);
+    free(temporario->exames_inscritos);
     free(temporario);
 }
 
@@ -672,7 +673,7 @@ void desinscrever(Aluno *a, Exame *e)
 void apagar_exames(Node_exame *listaE, Data data)
 {
     Node_exame *head;
-    head = listaE; /* Precisa-se para o argumento do remover */
+    head = listaE; /* Precisa-se de guardar o inicio da lista para o argumento do remover */
 
     listaE = listaE->next;
 

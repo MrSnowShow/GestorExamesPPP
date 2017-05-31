@@ -3,8 +3,8 @@
 
 /* Funcoes auxiliares */
 void remove_barraN(char *minha_string);
-int data_cmp(Data d1, Data d2);  /* Ambos retornam como o strcmp() */
-int hora_cmp(Hora h1, Hora h2);  /* -1 se 1<2, 1 se 1==2 e 1 se 1>2 */
+int data_cmp(Data d1, Data d2);
+int hora_cmp(Hora h1, Hora h2);
 int exame_cheio(Exame *e);
 Hora fim_exame(Exame *e);
 int exame_sobreposto(Node_exame *listaE, Exame *e);
